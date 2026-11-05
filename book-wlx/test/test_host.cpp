@@ -354,7 +354,10 @@ int main(int argc, char **argv) {
     }
 
     parent.hide();
-    dlclose(h);
+    /* Do not dlclose: QtWebEngine's profile/renderer outlive the views and DC
+     * keeps the module loaded anyway. Unloading it here crashes on Qt 6.4
+     * during process teardown (the assertions have already completed). */
+    QCoreApplication::processEvents();
     std::printf("\nRESULT: %s  (%d passed, %d failed)\n",
                 gFail == 0 ? "PASS" : "FAIL", gPass, gFail);
     return gFail == 0 ? 0 : 1;
