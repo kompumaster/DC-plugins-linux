@@ -7,7 +7,7 @@
  * the single most useful string per file type.
  *
  * Linux port of the upstream macOS plugin (NikolaiSachok/DC-plugins).
- * The macOS plugin uses ImageIO, AVFoundation and CGPDF; here the equivalents
+ * The upstream macOS plugin uses ImageIO, AVFoundation and CGPDF; here the equivalents
  * are system libraries:
  *   - images -> Qt's QImageReader (header read only; never decodes pixels)
  *   - audio/video -> libavformat (FFmpeg)
@@ -624,7 +624,7 @@ static int getValue(const QString &path, int field, void *value, int maxlen, int
     auto it = gCache.find(key);
     if (it == gCache.end()) {
         /* FFmpeg/open probes can be slow; defer audio/video to DC's background
-           thread when it asks (the same protocol the macOS plugin uses). */
+           thread when it asks (the same protocol the upstream plugin uses). */
         const bool slow = (cat == CAT_AUDIO || cat == CAT_VIDEO);
         if (slow && (flags & CONTENT_DELAYIFSLOW)) return ft_delayed;
         if (gCache.size() >= kCacheLimit) gCache.clear();

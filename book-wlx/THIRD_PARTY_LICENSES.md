@@ -1,7 +1,7 @@
 # Third-party licenses — book-wlx
 
 This port vendors one JavaScript library and dynamically links system
-libraries; it does not include the macOS plugin's code beyond the shared,
+libraries; it does not include the upstream plugin's code beyond the shared,
 MIT-licensed `zipreader.c` from the upstream [book-wlx](https://github.com/NikolaiSachok/DC-plugins/tree/main/book-wlx).
 
 | Component | File(s) | License | Project |

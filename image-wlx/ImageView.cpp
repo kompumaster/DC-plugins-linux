@@ -6,7 +6,7 @@
  * (wheel/keyboard/toolbar), drag panning, and SVG that stays
  * vector-sharp at any magnification.
  *
- * The macOS plugin is AppKit + ImageIO + CoreSVG. On Unix, Double Commander
+ * The upstream macOS plugin is AppKit + ImageIO + CoreSVG. On Unix, Double Commander
  * hands a WLX plugin a QWidget* and expects a QWidget* back, so this port is
  * C++/Qt:
  *   - raster decoding -> QImageReader (Qt image plugins; the detect string is
@@ -16,7 +16,7 @@
  *     fetches)
  *   - zoom/pan        -> QGraphicsView transform + this plugin's own drag
  *   - animation       -> QMovie (frame timing and loop count come from the
- *     file; APNG is the one macOS format Qt does not animate)
+ *     file; APNG is the one format from the macOS plugin that Qt does not animate)
  *   - clipboard       -> QClipboard with image/png + the file's own bytes
  *
  * Double Commander enables floating-point exception traps (it is an FPC app);

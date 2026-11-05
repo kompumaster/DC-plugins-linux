@@ -1,13 +1,15 @@
 # ImageView (Linux) — Double Commander WLX image viewer
 
 Linux/Double Commander port of
-[`image-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/image-wlx). Views images in the F3 viewer and Quick View with **zoom and pan that work**: wheel/keyboard/
-toolbar zoom, drag panning, and SVG that stays **vector-sharp at any
-magnification**. It shows pixel size, format, frame count and file size in its
-toolbar.
+[`image-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/image-wlx).
+Views images in the F3 viewer and Quick View with **zoom and pan that work**:
+wheel/keyboard/toolbar zoom, drag panning, and SVG that stays **vector-sharp at
+any magnification**. It shows pixel size, format, frame count and file size in
+its toolbar.
 
-The macOS plugin is AppKit + ImageIO + CoreSVG. Double Commander on Unix hands
-a WLX plugin a `QWidget*` and expects a `QWidget*` back, so this port is C++/Qt:
+The upstream macOS plugin is AppKit + ImageIO + CoreSVG. Double Commander on
+Unix hands a WLX plugin a `QWidget*` and expects a `QWidget*` back, so this port
+is C++/Qt:
 
 | Concern | macOS | Linux |
 |---|---|---|
@@ -30,8 +32,8 @@ a WLX plugin a `QWidget*` and expects a `QWidget*` back, so this port is C++/Qt:
 - **Transparency** over a checkerboard; EXIF orientation applied; the largest
   entry of an `.ico` / `.icns` / `.cur` is shown.
 - **Animation** (GIF, WebP, AVIF, JXL, ANI) plays with the file's own timing and
-  loop count. APNG is the one macOS format Qt does not animate; it shows its
-  first frame.
+  loop count. APNG is the one format from the macOS plugin that Qt does not
+  animate; it shows its first frame.
 - **Ctrl+C** copies the image as PNG (plus TIFF when small enough) and keeps
   the file's own bytes under its own type — the SVG source, an animated GIF,
   JPEG/WebP/AVIF originals.
@@ -137,7 +139,7 @@ with toolbar, Ctrl+/- and Ctrl+wheel zoom, drag panning, checkerboard
 transparency, animated GIF, SVG at 400% staying sharp, Ctrl+C into the
 clipboard, Esc/Q closing, and Quick View keeping the panel's cursor keys.
 
-## Differences from the macOS plugin
+## Differences from the upstream macOS plugin
 
 - Backends are Qt/`QImageReader`/`QSvgRenderer`/`QMovie` instead of
   ImageIO/CoreSVG.

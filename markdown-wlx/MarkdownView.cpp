@@ -6,7 +6,7 @@
  * generated page and rendered client-side by the
  * vendored marked.js / DOMPurify / highlight.js, with Mermaid and KaTeX added
  * only when the document needs them. The vendored assets are shared with the
- * macOS plugin (copied, so this directory stays self-contained).
+ * upstream macOS plugin (copied, so this directory stays self-contained).
  *
  * What differs is the host layer. On macOS Double Commander passes/expects
  * NSView* and the view is a WKWebView. On Unix it passes a QWidget* (the
@@ -308,7 +308,7 @@ bool MDView::loadMarkdown(const QString &path) {
         head += QStringLiteral("<script src=\"%1\"></script>").arg(assetUrl(QStringLiteral("mathext.js")));
     }
 
-    /* Same bootstrap as the macOS plugin. It has to run after the vendored
+    /* Same bootstrap as the upstream plugin. It has to run after the vendored
      * libraries (they are classic <script> tags above) and before the first
      * paint the harness observes. window.__mdvReady is the readiness probe the
      * test harness polls; it is also where a future scroll-restore hook goes. */
@@ -356,7 +356,7 @@ bool MDView::loadMarkdown(const QString &path) {
              b64, bootstrap);
 
     /* A file:// page (not setHtml/data:) so the document's relative images and
-     * the vendored scripts/CSS share an origin. Same shape as the macOS plugin,
+     * the vendored scripts/CSS share an origin. Same shape as the upstream plugin,
      * which writes a temp page and loads it from disk. */
     removeTempFile();
     const QString name = QStringLiteral("dc-mdview-%1-%2.html")

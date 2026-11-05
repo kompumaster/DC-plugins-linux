@@ -70,7 +70,7 @@ See [docs/ADDING-A-PLUGIN.md](docs/ADDING-A-PLUGIN.md) to scaffold a new one.
 
 ## Upstream
 
-These plugins are ported from the macOS project
+These plugins are ported from the upstream macOS project
 [`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins); the
 upstream tree is not vendored here. Clone it separately (or add it as a `git`
 remote) when you need to compare or sync shared code (`zipreader.c`,

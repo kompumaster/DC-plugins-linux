@@ -1,11 +1,12 @@
 # BookView (Linux) — Double Commander WLX e-book reader
 
 Linux/Double Commander port of
-[`book-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/book-wlx). Reads **EPUB 2/3** and **FictionBook (FB2 / FBZ)** in DC's F3 viewer: contents sidebar, one
-continuous reflowable column, cover and metadata, light/dark/sepia themes,
-session reading position and text size.
+[`book-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/book-wlx).
+Reads **EPUB 2/3** and **FictionBook (FB2 / FBZ)** in DC's F3 viewer: contents
+sidebar, one continuous reflowable column, cover and metadata, light/dark/sepia
+themes, session reading position and text size.
 
-The macOS plugin serves the book from its container through a private
+The upstream macOS plugin serves the book from its container through a private
 `x-book://` scheme. QtWebEngine only accepts custom scheme handlers registered
 before `QApplication` exists, and a plugin is loaded into an already-running
 host, so this port serves the same bytes from a **loopback-only HTTP server**
@@ -111,10 +112,10 @@ Add a `[BookView]` section to DC's `wlx.ini`
 
 ## How it works
 
-- `zipreader.c` (shared with the macOS plugin) reads the central directory and
+- `zipreader.c` (shared with the upstream macOS plugin) reads the central directory and
   inflates stored/deflated entries with zlib (ZIP64, CRC-32, size caps).
 - The native side detects the format from content and starts the loopback
-  server. `reader.js` — the same document model as macOS — fetches
+  server. `reader.js` — the same document model as the upstream reader — fetches
   `container.xml`, the OPF, spine documents, nav/NCX and FB2 `document.fb2`
   from that origin, so relative hrefs, images and fonts work unchanged.
 - Chrome (title bar, contents, progress, version) draws its labels as CSS
@@ -147,7 +148,7 @@ chapter, FB2 and FBZ text, TOC sidebar via `t`, larger text via `+`, F7 search
 jumping to the last chapter with a highlight, Ctrl+A/C copying the prose (not
 the sidebar), Esc closing, and the error page for a non-book file.
 
-## Differences from the macOS plugin
+## Differences from the upstream macOS plugin
 
 - **Transport**: loopback HTTP with a token instead of `x-book://`. Cookies,
   cache and the port stay inside this process; the server is stopped on close.
@@ -155,7 +156,7 @@ the sidebar), Esc closing, and the error page for a non-book file.
   threat model as reading the file itself.
 - Copy goes through the Qt clipboard (text + HTML) rather than WebKit's
   pasteboard copy; the selection is the same.
-- No printing (the macOS plugin has none either).
+- No printing (the upstream plugin has none either).
 - Keep `assets/reader.js` in sync with the upstream
   [book-wlx reader.js](https://github.com/NikolaiSachok/DC-plugins/blob/main/book-wlx/assets/reader.js);
   the Linux copy differs only in `post()` (a POST to the server instead of a WKWebView

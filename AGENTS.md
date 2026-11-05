@@ -1,8 +1,9 @@
 # DC-plugins-linux — Agent Charter
 
-Public repo of **native Linux plugins for Double Commander**, ported from the
-macOS plugins by Nikolai Sachok. Every plugin holds the same bar and the history
-stays leak-clean and professional.
+Public repo of **native Linux plugins for Double Commander**, built on the
+upstream macOS plugins in
+[`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins). Every
+plugin holds the same bar and the history stays leak-clean and professional.
 
 `AGENTS.md` is the canonical instruction file for all agents; `CLAUDE.md` is a
 relative symlink to it. Edit `AGENTS.md`.

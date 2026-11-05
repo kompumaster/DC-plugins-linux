@@ -99,7 +99,7 @@ to them belong there; this repository only carries the Linux ports.
 
 ## Syncing with upstream
 
-The Linux plugins share code and assets with the macOS ones (`zipreader.c`,
+The Linux plugins share code and assets with the upstream macOS ones (`zipreader.c`,
 `reader.js`/`reader.css`, DOMPurify, Markdown's vendored libraries). Upstream
 changes are brought over manually from
 [`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins) — clone

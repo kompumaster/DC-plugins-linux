@@ -1,10 +1,12 @@
 # MarkdownView (Linux) — Double Commander Markdown viewer
 
 Linux/Double Commander port of
-[`markdown-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/markdown-wlx). It renders Markdown in DC's F3 viewer with GitHub-style CSS, syntax highlighting, GFM
-tables and task lists, Mermaid diagrams, KaTeX math and light/dark theming.
+[`markdown-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/markdown-wlx).
+It renders Markdown in DC's F3 viewer with GitHub-style CSS, syntax
+highlighting, GFM tables and task lists, Mermaid diagrams, KaTeX math and
+light/dark theming.
 
-The rendering core is shared with the macOS plugin: the same vendored
+The rendering core is shared with the upstream macOS plugin: the same vendored
 `assets/` (marked, DOMPurify, highlight.js, KaTeX, Mermaid, GitHub CSS) and the
 same generated page. Only the host layer is new — Qt 6 `QWidget` +
 `QWebEngineView` instead of AppKit `NSView` + `WKWebView`, because Double
@@ -113,13 +115,13 @@ Wayland/XWayland): F3 rendering, Esc/Q, PageUp/PageDown, F7 search with
 highlight and scroll, Ctrl+A/C through the clipboard, Alt+←/→, Mermaid, KaTeX,
 the `wlx.ini` theme and width settings, and teardown on close.
 
-## Known differences from the macOS plugin
+## Known differences from the upstream macOS plugin
 
 - **Printing** is not implemented yet: `ListPrintW` is not exported, so DC
   greys out File → Print. QtWebEngine has no native print dialog; a future
   implementation would go through `QWebEnginePage::printToPdf`.
 - **Scroll position** is not remembered per file yet.
-- The macOS plugin writes its own temp HTML page too; here it lands in the
+- The upstream plugin writes its own temp HTML page too; here it lands in the
   system temp directory and is removed when the viewer closes or the file
   changes.
 - **Remote images are not fetched.** `LocalContentCanAccessRemoteUrls` is off,
@@ -142,7 +144,7 @@ the `wlx.ini` theme and width settings, and teardown on close.
   widgetset ignores non-spontaneous events, and a focused `QWebEngineView`
   would otherwise swallow Esc (the same trap as `WKWebView` on macOS).
 - Mermaid/KaTeX are only loaded when the document contains their delimiters,
-  matching the macOS plugin.
+  matching the upstream plugin.
 
 ## License
 

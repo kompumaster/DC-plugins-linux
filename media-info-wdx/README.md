@@ -1,13 +1,14 @@
 # MediaInfo (Linux) — Double Commander WDX content plugin
 
 Linux/Double Commander port of
-[`media-info-wdx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/media-info-wdx). A **content (WDX) plugin** that surfaces per-file media metadata as fields you can
-show in Double Commander's **custom columns** and **tooltips** — so the
+[`media-info-wdx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/media-info-wdx).
+A **content (WDX) plugin** that surfaces per-file media metadata as fields you
+can show in Double Commander's **custom columns** and **tooltips** — so the
 resolution of an image, the length of a clip, or a PDF's page count is visible
 **right in the file listing**, without opening a preview or a second app.
 
-The macOS plugin uses ImageIO, AVFoundation and CGPDF; Linux has no exact
-equivalents, so this port uses the native system libraries:
+The upstream macOS plugin uses ImageIO, AVFoundation and CGPDF; Linux has no
+exact equivalents, so this port uses the native system libraries:
 
 | File type | Fields | Backend |
 |-----------|--------|---------|
@@ -126,7 +127,7 @@ pdf:    pdf
   under the default masked environment then raises a fatal trap, which DC
   surfaces as an "Access violation". The plugin masks FP exceptions around every
   parse and restores the host's environment before returning.
-- **AVI/MKV/WebM** are read by FFmpeg on Linux (the macOS plugin had to carry its
+- **AVI/MKV/WebM** are read by FFmpeg on Linux (the upstream plugin had to carry its
   own RIFF/EBML readers because AVFoundation can't open them). Display aspect
   ratio and the MP4/Matroska display matrix rotation are applied to the reported
   dimensions.
@@ -150,7 +151,7 @@ No display is needed. The same column behaviour was verified in the real Double
 Commander (Qt 6): a `Media` column rendered `320 × 240 · 0:02`, `2 pages`,
 `0:01`, `640 × 480` for generated samples.
 
-## Differences from the macOS plugin
+## Differences from the upstream macOS plugin
 
 - Backends are Qt/FFmpeg/Poppler instead of ImageIO/AVFoundation/CGPDF.
 - More audio/video containers are recognized (flac, ogg/opus, wma, wmv, flv,

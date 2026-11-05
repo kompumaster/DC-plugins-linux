@@ -23,7 +23,7 @@
  *
  * The document model (EPUB OPF/spine/nav/NCX and FB2 structures) lives in
  * assets/reader.js, where DOMParser handles real-world markup and DOMPurify
- * sanitises EPUB chapters. zipreader.c (shared with the macOS plugin) reads the
+ * sanitises EPUB chapters. zipreader.c (shared with the upstream macOS plugin) reads the
  * container and inflates entries with zlib.
  */
 
@@ -785,7 +785,7 @@ void BookView::keyPressEvent(QKeyEvent *event) {
         (Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier | Qt::MetaModifier);
     const bool plain = (mods & ~Qt::ShiftModifier) == Qt::NoModifier;
 
-    /* Reader shortcuts, as in the macOS plugin: t toggles contents, +/- text size. */
+    /* Reader shortcuts, as in the upstream plugin: t toggles contents, +/- text size. */
     if (plain) {
         if (event->key() == Qt::Key_T) {
             dispatchReaderKey(QStringLiteral("t"));
