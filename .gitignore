@@ -1,0 +1,18 @@
+# Build output (plugins are built from source — never commit binaries)
+**/build/
+*.o
+*.so
+*.wlx
+*.wcx
+*.wdx
+*.wfx
+
+# Config backups produced by the installers
+*.bak-*
+doublecmd.xml.bak-*
+
+# Editor / tooling
+*.swp
+*.swo
+.idea/
+.vscode/

@@ -1,0 +1,94 @@
+#!/bin/sh
+# DC-plugins-linux deterministic pre-commit gate (Tier 1).
+#
+# 1. leak-guard — always
+# 2. build + ELF/ABI — only when a plugin's native source is staged
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+# Emergency skip:         git commit --no-verify
+set -e
+
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+
+echo "[pre-commit] leak-guard"
+sh scripts/leak-guard.sh
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+
+# --- markdown-wlx-linux ---------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^markdown-wlx-linux/(MarkdownView\.cpp|listplug\.h|build\.sh)$'; then
+    echo "[pre-commit] markdown-wlx-linux source staged -> building"
+    ( cd markdown-wlx-linux && ./build.sh >/dev/null )
+    wlx="markdown-wlx-linux/build/MarkdownView.wlx"
+    info=$(file "$wlx")
+    case "$info" in
+        *ELF*shared\ object* | *ELF*pie\ executable*) ;;
+        *) echo "[pre-commit] FAIL: not an ELF shared object -> $info"; exit 1 ;;
+    esac
+    for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
+               ListGetDetectString ListSetDefaultParams ListSendCommand \
+               ListSearchText ListSearchTextW; do
+        nm -D --defined-only "$wlx" | grep -q " T $sym$" \
+            || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
+    done
+    echo "[pre-commit] markdown-wlx-linux OK (ELF, all ABI exports present)"
+fi
+
+# --- media-info-wdx-linux -------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^media-info-wdx-linux/(MediaInfo\.cpp|contplug\.h|build\.sh)$'; then
+    echo "[pre-commit] media-info-wdx-linux source staged -> building"
+    ( cd media-info-wdx-linux && ./build.sh >/dev/null )
+    wdx="media-info-wdx-linux/build/MediaInfo.wdx"
+    info=$(file "$wdx")
+    case "$info" in
+        *ELF*shared\ object* | *ELF*pie\ executable*) ;;
+        *) echo "[pre-commit] FAIL: not an ELF shared object -> $info"; exit 1 ;;
+    esac
+    for sym in ContentGetSupportedField ContentGetValue ContentGetValueW \
+               ContentGetSupportedFieldFlags ContentGetDetectString \
+               ContentSetDefaultParams ContentPluginUnloading; do
+        nm -D --defined-only "$wdx" | grep -q " T $sym$" \
+            || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
+    done
+    echo "[pre-commit] media-info-wdx-linux OK (ELF, all ABI exports present)"
+fi
+
+# --- image-wlx-linux ------------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^image-wlx-linux/(ImageView\.cpp|listplug\.h|build\.sh)$'; then
+    echo "[pre-commit] image-wlx-linux source staged -> building"
+    ( cd image-wlx-linux && ./build.sh >/dev/null )
+    wlx="image-wlx-linux/build/ImageView.wlx"
+    info=$(file "$wlx")
+    case "$info" in
+        *ELF*shared\ object* | *ELF*pie\ executable*) ;;
+        *) echo "[pre-commit] FAIL: not an ELF shared object -> $info"; exit 1 ;;
+    esac
+    for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
+               ListGetDetectString ListSetDefaultParams ListSendCommand; do
+        nm -D --defined-only "$wlx" | grep -q " T $sym$" \
+            || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
+    done
+    echo "[pre-commit] image-wlx-linux OK (ELF, all ABI exports present)"
+fi
+
+# --- book-wlx-linux -------------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^book-wlx-linux/(BookView\.cpp|zipreader\.[ch]|build\.sh)$'; then
+    echo "[pre-commit] book-wlx-linux source staged -> building"
+    ( cd book-wlx-linux && ./build.sh >/dev/null )
+    wlx="book-wlx-linux/build/BookView.wlx"
+    info=$(file "$wlx")
+    case "$info" in
+        *ELF*shared\ object* | *ELF*pie\ executable*) ;;
+        *) echo "[pre-commit] FAIL: not an ELF shared object -> $info"; exit 1 ;;
+    esac
+    for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
+               ListGetDetectString ListSetDefaultParams ListSendCommand \
+               ListSearchText ListSearchTextW; do
+        nm -D --defined-only "$wlx" | grep -q " T $sym$" \
+            || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
+    done
+    echo "[pre-commit] book-wlx-linux OK (ELF, all ABI exports present)"
+fi
+
+echo "[pre-commit] passed"

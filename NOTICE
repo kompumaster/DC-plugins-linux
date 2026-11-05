@@ -1,0 +1,18 @@
+# NOTICE
+
+This repository contains Linux ports of the Double Commander plugins from
+
+    https://github.com/NikolaiSachok/DC-plugins
+
+Copyright (c) 2026 Nikolai Sachok, released under the MIT License (see
+[LICENSE](LICENSE)).
+
+The upstream macOS sources are kept in [`_mac_repo/`](_mac_repo/) as a reference
+snapshot. The Linux ports in `markdown-wlx-linux/`, `media-info-wdx-linux/`,
+`image-wlx-linux/` and `book-wlx-linux/` are derivative works: they reuse the
+upstream plugin ABI headers, `zipreader.c`, the reader assets (`reader.js`,
+`reader.css`), the vendored JavaScript libraries and Markdown's assets, and port
+the behaviour to Qt 6.
+
+Vendored third-party libraries keep their own licenses; each plugin lists them in
+its `THIRD_PARTY_LICENSES.md`.

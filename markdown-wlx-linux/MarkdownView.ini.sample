@@ -1,0 +1,15 @@
+; MarkdownView (Linux) — optional configuration.
+;
+; Double Commander passes every WLX plugin the same ini file:
+;   ${XDG_CONFIG_HOME:-$HOME/.config}/doublecmd/wlx.ini
+; Copy the section below into that file (create it if needed).
+; Values are re-read each time a document is opened — no restart.
+
+[MarkdownView]
+theme       = auto   ; auto (follow the system) | light | dark
+maxwidth    = 980    ; content column width, px
+fontsize    = 16     ; base font size, px
+mermaid     = 1      ; render ```mermaid blocks (1/0)
+math        = 1      ; render $$…$$ and \(…\)/\[…\] with KaTeX (1/0)
+mathdollar  = 0      ; also treat single $…$ as math (off; avoids mangling "$5 to $10")
+showversion = 1      ; faint version badge in the bottom-right corner (1/0)

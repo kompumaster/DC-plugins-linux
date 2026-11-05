@@ -1,0 +1,90 @@
+name: Release (Linux)
+
+# Tag a release: git tag markdown-wlx-linux-v0.1.0 && git push origin markdown-wlx-linux-v0.1.0
+on:
+  push:
+    tags:
+      - '*-linux-v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select plugin
+        run: |
+          case "$GITHUB_REF_NAME" in
+            markdown-wlx-linux-v*)
+              echo "DIR=markdown-wlx-linux" >> "$GITHUB_ENV"
+              echo "BIN=MarkdownView.wlx" >> "$GITHUB_ENV"
+              echo "BUNDLE=MarkdownView" >> "$GITHUB_ENV"
+              echo "ASSETS=1" >> "$GITHUB_ENV"
+              echo "DEPS=qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb" >> "$GITHUB_ENV"
+              ;;
+            media-info-wdx-linux-v*)
+              echo "DIR=media-info-wdx-linux" >> "$GITHUB_ENV"
+              echo "BIN=MediaInfo.wdx" >> "$GITHUB_ENV"
+              echo "BUNDLE=MediaInfo" >> "$GITHUB_ENV"
+              echo "ASSETS=0" >> "$GITHUB_ENV"
+              echo "DEPS=qt6-base-dev qt6-image-formats-plugins libavformat-dev libavcodec-dev libavutil-dev libpoppler-glib-dev ffmpeg" >> "$GITHUB_ENV"
+              ;;
+            image-wlx-linux-v*)
+              echo "DIR=image-wlx-linux" >> "$GITHUB_ENV"
+              echo "BIN=ImageView.wlx" >> "$GITHUB_ENV"
+              echo "BUNDLE=ImageView" >> "$GITHUB_ENV"
+              echo "ASSETS=0" >> "$GITHUB_ENV"
+              echo "DEPS=qt6-base-dev qt6-svg-dev qt6-image-formats-plugins imagemagick xvfb" >> "$GITHUB_ENV"
+              ;;
+            book-wlx-linux-v*)
+              echo "DIR=book-wlx-linux" >> "$GITHUB_ENV"
+              echo "BIN=BookView.wlx" >> "$GITHUB_ENV"
+              echo "BUNDLE=BookView" >> "$GITHUB_ENV"
+              echo "ASSETS=1" >> "$GITHUB_ENV"
+              echo "DEPS=qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb" >> "$GITHUB_ENV"
+              ;;
+            *)
+              echo "Unknown tag: $GITHUB_REF_NAME"; exit 1
+              ;;
+          esac
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends $DEPS
+
+      - name: Build plugin
+        run: |
+          cd "$DIR"
+          ./build.sh
+
+      - name: Assemble install bundle
+        run: |
+          cd "$DIR"
+          rm -rf "$BUNDLE" && mkdir "$BUNDLE"
+          cp "build/$BIN" "$BUNDLE/"
+          if [ "$ASSETS" = "1" ]; then cp -R assets "$BUNDLE/assets"; fi
+          cp install.sh register_plugin.py README.md THIRD_PARTY_LICENSES.md "$BUNDLE/"
+          ZIP="$BUNDLE-linux-${GITHUB_REF_NAME}.zip"
+          zip -rqy "$ZIP" "$BUNDLE"
+          sha256sum "$ZIP" > "$ZIP.sha256"
+          ls -la ./*.zip*
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          body: |
+            Prebuilt **x86_64** Linux plugin for Double Commander (`.wlx`/`.wdx`).
+
+            **Install (no toolchain needed):** unzip, quit Double Commander, then
+            run `./install.sh`. Verify the download with the included `.sha256`.
+
+            On other architectures build from source with `./build.sh`.
+          files: |
+            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ github.ref_name }}.zip
+            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ github.ref_name }}.zip.sha256

@@ -1,0 +1,130 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  leak-guard:
+    name: Leak guard (generic secrets/paths)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/leak-guard.sh
+
+  markdown:
+    name: Build & verify (markdown-wlx-linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt 6, WebEngine and Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb
+      - name: Build
+        working-directory: markdown-wlx-linux
+        run: ./build.sh
+      - name: Assert WLX exports
+        working-directory: markdown-wlx-linux
+        run: |
+          for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
+                     ListGetDetectString ListSetDefaultParams ListSendCommand \
+                     ListSearchText ListSearchTextW; do
+            nm -D --defined-only build/MarkdownView.wlx | grep -q " T $sym$" \
+              || { echo "missing export: $sym"; exit 1; }
+          done
+          echo "all WLX exports present ✓"
+      - name: Run harness (real artifact)
+        working-directory: markdown-wlx-linux
+        env:
+          QTWEBENGINE_DISABLE_SANDBOX: "1"
+          QTWEBENGINE_CHROMIUM_FLAGS: "--disable-gpu"
+        run: ./test/run.sh
+
+  media-info:
+    name: Build & verify (media-info-wdx-linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt 6, FFmpeg, Poppler and image plugins
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qt6-base-dev qt6-image-formats-plugins \
+            libavformat-dev libavcodec-dev libavutil-dev \
+            libpoppler-glib-dev ffmpeg
+      - name: Build
+        working-directory: media-info-wdx-linux
+        run: ./build.sh
+      - name: Assert WDX exports
+        working-directory: media-info-wdx-linux
+        run: |
+          for sym in ContentGetSupportedField ContentGetValue ContentGetValueW \
+                     ContentGetSupportedFieldFlags ContentGetDetectString \
+                     ContentSetDefaultParams ContentPluginUnloading; do
+            nm -D --defined-only build/MediaInfo.wdx | grep -q " T $sym$" \
+              || { echo "missing export: $sym"; exit 1; }
+          done
+          echo "all WDX exports present ✓"
+      - name: Run harness (real artifact)
+        working-directory: media-info-wdx-linux
+        run: ./test/run.sh
+
+  image:
+    name: Build & verify (image-wlx-linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt 6, SVG, image plugins, ImageMagick and Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qt6-base-dev qt6-svg-dev qt6-image-formats-plugins \
+            imagemagick xvfb
+      - name: Build
+        working-directory: image-wlx-linux
+        run: ./build.sh
+      - name: Assert WLX exports
+        working-directory: image-wlx-linux
+        run: |
+          for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
+                     ListGetDetectString ListSetDefaultParams ListSendCommand; do
+            nm -D --defined-only build/ImageView.wlx | grep -q " T $sym$" \
+              || { echo "missing export: $sym"; exit 1; }
+          done
+          echo "all WLX exports present ✓"
+      - name: Run harness (real artifact)
+        working-directory: image-wlx-linux
+        run: ./test/run.sh
+
+  book:
+    name: Build & verify (book-wlx-linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt 6, WebEngine and Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb
+      - name: Build
+        working-directory: book-wlx-linux
+        run: ./build.sh
+      - name: Assert WLX exports
+        working-directory: book-wlx-linux
+        run: |
+          for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
+                     ListGetDetectString ListSetDefaultParams ListSendCommand \
+                     ListSearchText ListSearchTextW; do
+            nm -D --defined-only build/BookView.wlx | grep -q " T $sym$" \
+              || { echo "missing export: $sym"; exit 1; }
+          done
+          echo "all WLX exports present ✓"
+      - name: Run harnesses (real artifact + ZIP reader)
+        working-directory: book-wlx-linux
+        env:
+          QTWEBENGINE_DISABLE_SANDBOX: "1"
+          QTWEBENGINE_CHROMIUM_FLAGS: "--disable-gpu"
+        run: ./test/run.sh
