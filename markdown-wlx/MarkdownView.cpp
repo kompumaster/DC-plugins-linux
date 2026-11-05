@@ -97,9 +97,15 @@ const char *const kSelectContentJS =
 } // namespace
 
 static bool systemPrefersDark(const QWidget *w) {
-    const Qt::ColorScheme scheme = QGuiApplication::styleHints()->colorScheme();
-    if (scheme == Qt::ColorScheme::Dark) return true;
-    if (scheme == Qt::ColorScheme::Light) return false;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    switch (QGuiApplication::styleHints()->colorScheme()) {
+    case Qt::ColorScheme::Dark:  return true;
+    case Qt::ColorScheme::Light: return false;
+    default: break;
+    }
+#endif
+    /* Qt < 6.5 has no QStyleHints::colorScheme(); DC's palette is the best
+     * available signal, and it matches what the web view renders. */
     return w->palette().color(QPalette::Window).lightness() < 128;
 }
 

@@ -22,5 +22,9 @@ echo "==> Running harness against build/BookView.wlx"
 if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
     ./build/test_host build/BookView.wlx build/samples
 else
+    # Headless WebEngine: software QtQuick + no sandbox + software GL.
+    export QTWEBENGINE_DISABLE_SANDBOX="${QTWEBENGINE_DISABLE_SANDBOX:-1}"
+    export QT_QUICK_BACKEND="${QT_QUICK_BACKEND:-software}"
+    export LIBGL_ALWAYS_SOFTWARE="${LIBGL_ALWAYS_SOFTWARE:-1}"
     xvfb-run -a ./build/test_host build/BookView.wlx build/samples
 fi

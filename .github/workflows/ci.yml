@@ -41,6 +41,8 @@ jobs:
         env:
           QTWEBENGINE_DISABLE_SANDBOX: "1"
           QTWEBENGINE_CHROMIUM_FLAGS: "--disable-gpu"
+          QT_QUICK_BACKEND: software
+          LIBGL_ALWAYS_SOFTWARE: "1"
         run: ./test/run.sh
 
   media-info:
@@ -127,4 +129,6 @@ jobs:
         env:
           QTWEBENGINE_DISABLE_SANDBOX: "1"
           QTWEBENGINE_CHROMIUM_FLAGS: "--disable-gpu"
+          QT_QUICK_BACKEND: software
+          LIBGL_ALWAYS_SOFTWARE: "1"
         run: ./test/run.sh

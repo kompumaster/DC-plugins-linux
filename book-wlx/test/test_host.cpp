@@ -118,7 +118,8 @@ static void closeBook(Book &b) {
 static bool waitLoaded(Book &b, int ms = 20000) {
     return waitJs(b.page,
                   "window.__dcReady===true || "
-                  "document.body.innerText.indexOf(\"Can't open\")>=0", ms);
+                  "(document.body && "
+                  " document.body.innerText.indexOf(\"Can't open\")>=0)", ms);
 }
 
 static QString textOf(Book &b) {
@@ -144,6 +145,7 @@ static void sendKey(QWidget *target, int key, Qt::KeyboardModifiers mods = Qt::N
 }
 
 int main(int argc, char **argv) {
+    std::setvbuf(stdout, nullptr, _IONBF, 0);   /* live output in CI */
     QApplication app(argc, argv);
     if (argc < 3) {
         std::fprintf(stderr, "usage: %s <BookView.wlx> <samples-dir>\n", argv[0]);
@@ -341,7 +343,9 @@ int main(int argc, char **argv) {
     {
         Book b = openBook(&parent, path("garbage.epub"));
         check(b.handle != 0, "malformed book still opens a view");
-        check(waitJs(b.page, QStringLiteral("document.body.innerText.indexOf(\"Can't open\")>=0")),
+        check(waitJs(b.page, QStringLiteral(
+                         "document.body && "
+                         "document.body.innerText.indexOf(\"Can't open\")>=0")),
               "malformed book shows the reason");
         SearchW(b.handle, wide(QStringLiteral("EPUB")), lcs_findfirst);
         check(waitJs(b.page, QStringLiteral("window.__dcFindResult>=1"), 10000),
