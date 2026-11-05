@@ -39,3 +39,8 @@ independently and tagged `<plugin>-vX.Y.Z`.
   background is set to the theme colour before navigation (and the first HTML
   byte paints it), instead of WebEngine's white blank page showing until the
   stylesheet arrives.
+- **book-wlx:** no white flash before a book paints. The page and host
+  backgrounds are set to the configured theme colour (auto/light/dark/sepia)
+  before navigation, and the first HTML byte paints the same colour; the error
+  page follows the system theme. Verified with rapid frame captures on the dark
+  and sepia themes.

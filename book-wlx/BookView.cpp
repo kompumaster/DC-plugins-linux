@@ -28,6 +28,9 @@
  */
 
 #include <QApplication>
+#include <QGuiApplication>
+#include <QPalette>
+#include <QStyleHints>
 #include <QClipboard>
 #include <QMimeData>
 #include <QByteArray>
@@ -149,6 +152,17 @@ struct ZipHolder {
     ZipArchive *zip = nullptr;
     ~ZipHolder() { if (zip) ZipClose(zip); }
 };
+
+static bool systemPrefersDark(const QWidget *w) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    switch (QGuiApplication::styleHints()->colorScheme()) {
+    case Qt::ColorScheme::Dark:  return true;
+    case Qt::ColorScheme::Light: return false;
+    default: break;
+    }
+#endif
+    return w->palette().color(QPalette::Window).lightness() < 128;
+}
 
 /* ---- Loopback book server ----------------------------------------------- */
 
@@ -356,6 +370,7 @@ private:
 
     QString buildShell(const QString &base, const QString &format, const QString &fileName,
                        const QString &errorReason) const;
+    QColor computePageBackground(bool isBook) const;
     void serverMessage(const QJsonObject &msg);
     void runSearches();
     void dispatchReaderKey(const QString &key);
@@ -373,6 +388,7 @@ private:
     QList<SearchJob> searches_;
     bool searching_ = false;
     int loadCounter_ = 0;
+    QColor pageBg_ = QColor(0xfb, 0xfa, 0xf7);
     QHash<QString, QPair<int, double>> positions_;
 };
 
@@ -405,6 +421,22 @@ BookView::~BookView() {
 int BookView::currentFontSize(const QSettings &cfg) const {
     if (gFontSizeOverride > 0) return gFontSizeOverride;
     return qMax(10, cfg.value(QStringLiteral("BookView/fontsize"), 18).toInt());
+}
+
+QColor BookView::computePageBackground(bool isBook) const {
+    const QSettings cfg(configIniPath(), QSettings::IniFormat);
+    QString theme = cfg.value(QStringLiteral("BookView/theme"), QStringLiteral("auto"))
+                        .toString().toLower();
+    if (theme != QLatin1String("light") && theme != QLatin1String("dark") &&
+        theme != QLatin1String("sepia"))
+        theme = QStringLiteral("auto");
+
+    const bool dark = systemPrefersDark(this);
+    if (!isBook) return dark ? QColor(0x16, 0x18, 0x1c) : QColor(0xfb, 0xfa, 0xf7);
+    if (theme == QLatin1String("sepia")) return QColor(0xf4, 0xec, 0xd8);
+    if (theme == QLatin1String("dark") ||
+        (theme == QLatin1String("auto") && dark)) return QColor(0x16, 0x18, 0x1c);
+    return QColor(0xfb, 0xfa, 0xf7);
 }
 
 QString BookView::buildShell(const QString &base, const QString &format,
@@ -456,14 +488,14 @@ QString BookView::buildShell(const QString &base, const QString &format,
             "content=\"default-src 'none'; style-src 'unsafe-inline'\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             "<style>html,body{margin:0;height:100%;display:flex;align-items:center;"
-            "justify-content:center;background:#fbfaf7;color:#3a352e;"
+            "justify-content:center;background:%3;color:#3a352e;"
             "font:14px/1.6 sans-serif;}@media(prefers-color-scheme:dark){html,body{"
-            "background:#16181c;color:#c9cdd4;}}.box{max-width:480px;padding:28px;"
+            "background:%3;color:#c9cdd4;}}.box{max-width:480px;padding:28px;"
             "text-align:center;}.t{font-size:16px;font-weight:600;margin-bottom:8px;}"
             ".f{opacity:.6;font-size:12px;margin-top:14px;word-break:break-all;}</style>"
             "</head><body><div class=\"box\"><div class=\"t\">Can't open this book</div>"
             "<div>%1</div><div class=\"f\">%2</div></div></body></html>")
-            .arg(htmlEscape(errorReason), htmlEscape(fileName));
+            .arg(htmlEscape(errorReason), htmlEscape(fileName), pageBg_.name());
     }
 
     const bool tocOpen = toc && width() > 900;
@@ -479,6 +511,7 @@ QString BookView::buildShell(const QString &base, const QString &format,
         "<meta http-equiv=\"Content-Security-Policy\" content=\"%3\">"
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
         "<title>%4</title>"
+        "<style>html,body{background:%6;}</style>"
         "<link rel=\"stylesheet\" href=\"reader.css\">"
         "<script id=\"dc-config\" type=\"application/json\">%5</script>"
         "</head><body>"
@@ -510,7 +543,7 @@ QString BookView::buildShell(const QString &base, const QString &format,
         "<script src=\"reader.js\"></script>"
         "</body></html>")
         .arg(theme, tocOpen ? QStringLiteral(" class=\"toc-open\"") : QString(),
-             csp, htmlEscape(fileName), json);
+             csp, htmlEscape(fileName), json, pageBg_.name());
 }
 
 bool BookView::loadBook(const QString &path) {
@@ -586,6 +619,19 @@ bool BookView::loadBook(const QString &path) {
             reason = QStringLiteral("The file could not be read.");
         }
     }
+
+    pageBg_ = computePageBackground(isBook);
+    web_->page()->setBackgroundColor(pageBg_);
+    setAutoFillBackground(true);
+    QPalette hostPalette = palette();
+    hostPalette.setColor(QPalette::Window, pageBg_);
+    setPalette(hostPalette);
+    web_->setAutoFillBackground(true);
+    QPalette webPalette = web_->palette();
+    webPalette.setColor(QPalette::Base, pageBg_);
+    webPalette.setColor(QPalette::Window, pageBg_);
+    web_->setPalette(webPalette);
+    web_->setStyleSheet(QStringLiteral("background-color:%1;").arg(pageBg_.name()));
 
     if (!server_.start()) {
         /* No loopback listener: show the reason without a book page. */
