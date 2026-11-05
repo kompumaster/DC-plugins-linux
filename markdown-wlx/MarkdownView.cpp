@@ -1,8 +1,9 @@
 /*
  * MarkdownView.wlx — Double Commander Lister (WLX) plugin for Linux.
  *
- * Linux port of ../_mac_repo/markdown-wlx. The rendering core is the same: the Markdown
- * source is base64-embedded in a generated page and rendered client-side by the
+ * Linux port of the upstream macOS plugin (NikolaiSachok/DC-plugins).
+ * The rendering core is the same: the Markdown source is base64-embedded in a
+ * generated page and rendered client-side by the
  * vendored marked.js / DOMPurify / highlight.js, with Mermaid and KaTeX added
  * only when the document needs them. The vendored assets are shared with the
  * macOS plugin (copied, so this directory stays self-contained).

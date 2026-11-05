@@ -1,7 +1,7 @@
 # BookView (Linux) — Double Commander WLX e-book reader
 
-Linux/Double Commander port of [`../_mac_repo/book-wlx`](../_mac_repo/book-wlx). Reads **EPUB 2/3**
-and **FictionBook (FB2 / FBZ)** in DC's F3 viewer: contents sidebar, one
+Linux/Double Commander port of
+[`book-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/book-wlx). Reads **EPUB 2/3** and **FictionBook (FB2 / FBZ)** in DC's F3 viewer: contents sidebar, one
 continuous reflowable column, cover and metadata, light/dark/sepia themes,
 session reading position and text size.
 
@@ -156,8 +156,9 @@ the sidebar), Esc closing, and the error page for a non-book file.
 - Copy goes through the Qt clipboard (text + HTML) rather than WebKit's
   pasteboard copy; the selection is the same.
 - No printing (the macOS plugin has none either).
-- Keep `assets/reader.js` in sync with `../_mac_repo/book-wlx/assets/reader.js`; the Linux
-  copy differs only in `post()` (a POST to the server instead of a WKWebView
+- Keep `assets/reader.js` in sync with the upstream
+  [book-wlx reader.js](https://github.com/NikolaiSachok/DC-plugins/blob/main/book-wlx/assets/reader.js);
+  the Linux copy differs only in `post()` (a POST to the server instead of a WKWebView
   script message), the readiness global and the origin-aware sanitiser regex.
 
 ## License

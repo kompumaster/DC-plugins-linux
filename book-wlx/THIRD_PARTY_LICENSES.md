@@ -2,7 +2,7 @@
 
 This port vendors one JavaScript library and dynamically links system
 libraries; it does not include the macOS plugin's code beyond the shared,
-MIT-licensed `zipreader.c` from `../_mac_repo/book-wlx`.
+MIT-licensed `zipreader.c` from the upstream [book-wlx](https://github.com/NikolaiSachok/DC-plugins/tree/main/book-wlx).
 
 | Component | File(s) | License | Project |
 |-----------|---------|---------|---------|
@@ -11,5 +11,5 @@ MIT-licensed `zipreader.c` from `../_mac_repo/book-wlx`.
 | zlib | dynamically linked | Zlib | https://zlib.net/ |
 
 `assets/reader.js` and `assets/reader.css` are this repository's own code
-(shared with `../_mac_repo/book-wlx`). The plugin's source is MIT-licensed — see the
+(shared with the upstream [book-wlx](https://github.com/NikolaiSachok/DC-plugins/tree/main/book-wlx)). The plugin's source is MIT-licensed — see the
 repository [LICENSE](../LICENSE).

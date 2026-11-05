@@ -6,8 +6,9 @@
  * bitrate, codecs, PDF page count, and an adaptive "Summary" field that picks
  * the single most useful string per file type.
  *
- * Linux port of ../_mac_repo/media-info-wdx. The macOS plugin uses ImageIO,
- * AVFoundation and CGPDF; here the equivalents are system libraries:
+ * Linux port of the upstream macOS plugin (NikolaiSachok/DC-plugins).
+ * The macOS plugin uses ImageIO, AVFoundation and CGPDF; here the equivalents
+ * are system libraries:
  *   - images -> Qt's QImageReader (header read only; never decodes pixels)
  *   - audio/video -> libavformat (FFmpeg)
  *   - PDF -> poppler-glib

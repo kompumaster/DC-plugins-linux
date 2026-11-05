@@ -68,13 +68,14 @@ diff.
 
 See [docs/ADDING-A-PLUGIN.md](docs/ADDING-A-PLUGIN.md) to scaffold a new one.
 
-## Upstream snapshot
+## Upstream
 
-[`_mac_repo/`](_mac_repo/) is a read-only snapshot of the macOS project these
-plugins were ported from. Do not edit or build it here. If upstream changes
-shared code (`zipreader.c`, `reader.js`/`reader.css`, DOMPurify, Markdown
-assets), port the change deliberately and note the divergence in the plugin's
-README.
+These plugins are ported from the macOS project
+[`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins); the
+upstream tree is not vendored here. Clone it separately (or add it as a `git`
+remote) when you need to compare or sync shared code (`zipreader.c`,
+`reader.js`/`reader.css`, DOMPurify, Markdown assets). Port the change
+deliberately and note the divergence in the plugin's README.
 
 ## Code style
 

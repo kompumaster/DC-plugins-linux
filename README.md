@@ -14,8 +14,10 @@ the real built artifact.
 | [`image-wlx`](image-wlx/) | WLX (lister) | Image viewer with wheel/keyboard/toolbar zoom, drag panning, vector-sharp SVG, animations, and copy. |
 | [`book-wlx`](book-wlx/) | WLX (lister) | EPUB 2/3 and FictionBook (FB2/FBZ) reader with a contents sidebar, themes, readable typography and whole-book search. |
 
-The original macOS sources are kept in [`_mac_repo/`](_mac_repo/) as a read-only
-reference and attribution snapshot — see [Repository layout](#repository-layout).
+The original macOS plugins live upstream:
+[`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins). This
+repository contains only the Linux ports; the upstream repository is the
+source of truth for the macOS code and shared assets.
 
 ## Requirements
 
@@ -66,7 +68,6 @@ release; the harnesses are a regression net, not proof.
 ## Repository layout
 
 ```
-_mac_repo/            snapshot of the upstream macOS repository (read-only)
 markdown-wlx/
 media-info-wdx/
 image-wlx/
@@ -76,17 +77,18 @@ scripts/leak-guard.sh
 .github/workflows/    Linux CI and release workflows
 ```
 
-`_mac_repo/` is the upstream project exactly as it was when these ports were
-made. It is not part of the build and must not be edited here; fixes to the
-macOS plugins belong upstream. It exists so the original code, packaging and
-documentation stay available for attribution and comparison.
+The macOS plugins are not vendored here — they live upstream at
+[`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins). Fixes
+to them belong there; this repository only carries the Linux ports.
 
 ## Syncing with upstream
 
 The Linux plugins share code and assets with the macOS ones (`zipreader.c`,
 `reader.js`/`reader.css`, DOMPurify, Markdown's vendored libraries). Upstream
-changes are brought over manually — see each plugin's README for what diverges
-and why. Treat `_mac_repo/` as a pinned snapshot and refresh it deliberately.
+changes are brought over manually from
+[`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins) — clone
+it separately (or add it as a `git` remote) and port the change; see each
+plugin's README for what diverges and why.
 
 ## License
 

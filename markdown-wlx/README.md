@@ -1,7 +1,7 @@
 # MarkdownView (Linux) — Double Commander Markdown viewer
 
-Linux/Double Commander port of [`../_mac_repo/markdown-wlx`](../_mac_repo/markdown-wlx). It renders
-Markdown in DC's F3 viewer with GitHub-style CSS, syntax highlighting, GFM
+Linux/Double Commander port of
+[`markdown-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/markdown-wlx). It renders Markdown in DC's F3 viewer with GitHub-style CSS, syntax highlighting, GFM
 tables and task lists, Mermaid diagrams, KaTeX math and light/dark theming.
 
 The rendering core is shared with the macOS plugin: the same vendored

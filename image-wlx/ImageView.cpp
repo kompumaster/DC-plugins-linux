@@ -1,8 +1,9 @@
 /*
  * ImageView.wlx — Double Commander Lister (WLX) plugin for Linux.
  *
- * Linux port of ../_mac_repo/image-wlx. Shows images in the F3 viewer and Quick View
- * with free zoom (wheel/keyboard/toolbar), drag panning, and SVG that stays
+ * Linux port of the upstream macOS plugin (NikolaiSachok/DC-plugins).
+ * Shows images in the F3 viewer and Quick View with free zoom
+ * (wheel/keyboard/toolbar), drag panning, and SVG that stays
  * vector-sharp at any magnification.
  *
  * The macOS plugin is AppKit + ImageIO + CoreSVG. On Unix, Double Commander

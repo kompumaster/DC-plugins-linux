@@ -7,14 +7,14 @@ stays leak-clean and professional.
 `AGENTS.md` is the canonical instruction file for all agents; `CLAUDE.md` is a
 relative symlink to it. Edit `AGENTS.md`.
 
-## Upstream snapshot
+## Upstream
 
-`_mac_repo/` is a read-only snapshot of the upstream macOS repository
-(<https://github.com/NikolaiSachok/DC-plugins>, MIT). It is reference and
-attribution material:
+The macOS plugins live in the upstream project
+(<https://github.com/NikolaiSachok/DC-plugins>, MIT). They are not vendored here:
 
-- never build from it, never edit it, never "fix" it here;
-- refresh it deliberately (replace the tree) when syncing upstream;
+- never copy the upstream tree into this repository; link to it instead;
+- clone upstream separately (or add it as a `git` remote) when syncing shared
+  code and assets;
 - Linux code that derives from it keeps the upstream copyright via `LICENSE` and
   `NOTICE`.
 
@@ -135,5 +135,6 @@ Add a row to the root `README.md` and extend `.github/workflows/` for a new plug
 - [CONTRIBUTING.md](CONTRIBUTING.md) — build/test loop, layout convention, hook.
 - [docs/ADDING-A-PLUGIN.md](docs/ADDING-A-PLUGIN.md) — scaffold a new plugin.
 - Each plugin's README — behaviour, keys, dependencies, known limitations.
-- `_mac_repo/docs/` — the upstream architecture notes and the original platform
-  deep-dive (macOS-specific; useful for the "why").
+- <https://github.com/NikolaiSachok/DC-plugins/tree/main/docs> — the upstream
+  architecture notes and the original platform deep-dive (macOS-specific; useful
+  for the "why").

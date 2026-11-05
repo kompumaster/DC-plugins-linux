@@ -1,7 +1,7 @@
 # ImageView (Linux) — Double Commander WLX image viewer
 
-Linux/Double Commander port of [`../_mac_repo/image-wlx`](../_mac_repo/image-wlx). Views images in
-the F3 viewer and Quick View with **zoom and pan that work**: wheel/keyboard/
+Linux/Double Commander port of
+[`image-wlx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/image-wlx). Views images in the F3 viewer and Quick View with **zoom and pan that work**: wheel/keyboard/
 toolbar zoom, drag panning, and SVG that stays **vector-sharp at any
 magnification**. It shows pixel size, format, frame count and file size in its
 toolbar.

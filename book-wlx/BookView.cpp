@@ -5,8 +5,9 @@
  * sidebar, one continuous reflowable column, cover and metadata, light/dark/
  * sepia themes, session reading position and text size.
  *
- * Linux port of ../_mac_repo/book-wlx. The book is served to a QWebEngineView from a
- * loopback HTTP server with a per-load token:
+ * Linux port of the upstream macOS plugin (NikolaiSachok/DC-plugins).
+ * The book is served to a QWebEngineView from a loopback HTTP server with a
+ * per-load token:
  *
  *   http://127.0.0.1:<port>/<token>/__dcreader__/index.html   reader shell
  *   http://127.0.0.1:<port>/<token>/__dcreader__/reader.js    reader + DOMPurify

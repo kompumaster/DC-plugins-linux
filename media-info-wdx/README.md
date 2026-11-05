@@ -1,7 +1,7 @@
 # MediaInfo (Linux) — Double Commander WDX content plugin
 
-Linux/Double Commander port of [`../_mac_repo/media-info-wdx`](../_mac_repo/media-info-wdx). A
-**content (WDX) plugin** that surfaces per-file media metadata as fields you can
+Linux/Double Commander port of
+[`media-info-wdx`](https://github.com/NikolaiSachok/DC-plugins/tree/main/media-info-wdx). A **content (WDX) plugin** that surfaces per-file media metadata as fields you can
 show in Double Commander's **custom columns** and **tooltips** — so the
 resolution of an image, the length of a clip, or a PDF's page count is visible
 **right in the file listing**, without opening a preview or a second app.
