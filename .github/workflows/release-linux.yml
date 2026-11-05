@@ -1,13 +1,11 @@
 name: Release (Linux)
 
-# Tag a release: git tag markdown-wlx-v0.1.0 && git push origin markdown-wlx-v0.1.0
+# One release train, four archives:
+#   git tag linux-v0.1.0 && git push origin linux-v0.1.0
 on:
   push:
     tags:
-      - 'markdown-wlx-v*'
-      - 'media-info-wdx-v*'
-      - 'image-wlx-v*'
-      - 'book-wlx-v*'
+      - 'linux-v*'
 
 permissions:
   contents: write
@@ -18,77 +16,87 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select plugin
-        run: |
-          echo "VERSION=${GITHUB_REF_NAME##*-v}" >> "$GITHUB_ENV"
-          case "$GITHUB_REF_NAME" in
-            markdown-wlx-v*)
-              echo "DIR=markdown-wlx" >> "$GITHUB_ENV"
-              echo "BIN=MarkdownView.wlx" >> "$GITHUB_ENV"
-              echo "BUNDLE=MarkdownView" >> "$GITHUB_ENV"
-              echo "ASSETS=1" >> "$GITHUB_ENV"
-              echo "DEPS=qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb" >> "$GITHUB_ENV"
-              ;;
-            media-info-wdx-v*)
-              echo "DIR=media-info-wdx" >> "$GITHUB_ENV"
-              echo "BIN=MediaInfo.wdx" >> "$GITHUB_ENV"
-              echo "BUNDLE=MediaInfo" >> "$GITHUB_ENV"
-              echo "ASSETS=0" >> "$GITHUB_ENV"
-              echo "DEPS=qt6-base-dev qt6-image-formats-plugins libavformat-dev libavcodec-dev libavutil-dev libpoppler-glib-dev ffmpeg" >> "$GITHUB_ENV"
-              ;;
-            image-wlx-v*)
-              echo "DIR=image-wlx" >> "$GITHUB_ENV"
-              echo "BIN=ImageView.wlx" >> "$GITHUB_ENV"
-              echo "BUNDLE=ImageView" >> "$GITHUB_ENV"
-              echo "ASSETS=0" >> "$GITHUB_ENV"
-              echo "DEPS=qt6-base-dev qt6-svg-dev qt6-image-formats-plugins imagemagick xvfb" >> "$GITHUB_ENV"
-              ;;
-            book-wlx-v*)
-              echo "DIR=book-wlx" >> "$GITHUB_ENV"
-              echo "BIN=BookView.wlx" >> "$GITHUB_ENV"
-              echo "BUNDLE=BookView" >> "$GITHUB_ENV"
-              echo "ASSETS=1" >> "$GITHUB_ENV"
-              echo "DEPS=qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb" >> "$GITHUB_ENV"
-              ;;
-            *)
-              echo "Unknown tag: $GITHUB_REF_NAME"; exit 1
-              ;;
-          esac
-
-      - name: Install dependencies
+      - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends $DEPS zip
+          sudo apt-get install -y --no-install-recommends \
+            qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 \
+            qt6-svg-dev qt6-image-formats-plugins \
+            libavformat-dev libavcodec-dev libavutil-dev \
+            libpoppler-glib-dev ffmpeg imagemagick xvfb zip
 
-      - name: Build plugin
+      - name: Build all plugins
         run: |
-          cd "$DIR"
-          ./build.sh
+          set -e
+          for dir in markdown-wlx media-info-wdx image-wlx book-wlx; do
+            echo "==> $dir"
+            ( cd "$dir" && ./build.sh )
+          done
 
-      - name: Assemble install bundle
+      - name: Read plugin versions
         run: |
-          cd "$DIR"
-          rm -rf "$BUNDLE" && mkdir "$BUNDLE"
-          cp "build/$BIN" "$BUNDLE/"
-          if [ "$ASSETS" = "1" ]; then cp -R assets "$BUNDLE/assets"; fi
-          cp install.sh register_plugin.py README.md THIRD_PARTY_LICENSES.md "$BUNDLE/"
-          ZIP="$BUNDLE-linux-${VERSION}.zip"
-          zip -rqy "$ZIP" "$BUNDLE"
-          sha256sum "$ZIP" > "$ZIP.sha256"
-          ls -la ./*.zip*
+          set -e
+          mdv=$(sed -n 's/.*#define MDV_VERSION "\([^"]*\)".*/\1/p' markdown-wlx/MarkdownView.cpp | head -1)
+          miv=$(sed -n 's/.*#define MI_VERSION "\([^"]*\)".*/\1/p'  media-info-wdx/MediaInfo.cpp | head -1)
+          ivv=$(sed -n 's/.*#define IV_VERSION "\([^"]*\)".*/\1/p'  image-wlx/ImageView.cpp | head -1)
+          bvv=$(sed -n 's/.*#define BV_VERSION "\([^"]*\)".*/\1/p'  book-wlx/BookView.cpp | head -1)
+          for v in "$mdv" "$miv" "$ivv" "$bvv"; do
+            [ -n "$v" ] || { echo "could not read a plugin VERSION"; exit 1; }
+          done
+          {
+            echo "MDV=$mdv"
+            echo "MIV=$miv"
+            echo "IVV=$ivv"
+            echo "BVV=$bvv"
+            echo "RELEASE=${GITHUB_REF_NAME##linux-v}"
+          } >> "$GITHUB_ENV"
+
+      - name: Assemble one archive per plugin
+        run: |
+          set -e
+          rm -rf out && mkdir out
+
+          package() { # dir, bundle, binary, version, assets(0/1), ini-sample(0/1)
+            dir="$1"; bundle="$2"; bin="$3"; version="$4"; assets="$5"; ini="$6"
+            rm -rf "out/$bundle" && mkdir "out/$bundle"
+            cp "$dir/build/$bin" "out/$bundle/"
+            if [ "$assets" = "1" ]; then cp -R "$dir/assets" "out/$bundle/assets"; fi
+            cp "$dir/install.sh" "$dir/register_plugin.py" "$dir/README.md" \
+               "$dir/THIRD_PARTY_LICENSES.md" "out/$bundle/"
+            if [ "$ini" = "1" ]; then cp "$dir"/*.ini.sample "out/$bundle/"; fi
+            ( cd out && zip -rqy "$dir-$version-linux.zip" "$bundle" )
+          }
+
+          package markdown-wlx   MarkdownView MarkdownView.wlx "$MDV" 1 1
+          package media-info-wdx MediaInfo    MediaInfo.wdx    "$MIV" 0 0
+          package image-wlx      ImageView    ImageView.wlx    "$IVV" 0 0
+          package book-wlx       BookView     BookView.wlx     "$BVV" 1 1
+
+          ( cd out && sha256sum ./*-linux.zip > SHA256SUMS && cat SHA256SUMS )
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ github.ref_name }}
-          generate_release_notes: true
+          name: Linux plugins v${{ env.RELEASE }}
           body: |
-            Prebuilt **x86_64** Linux plugin for Double Commander (`.wlx`/`.wdx`).
+            Four Linux plugins for Double Commander, one archive each. Unzip the
+            one you need, quit Double Commander, then run `./install.sh`.
 
-            **Install (no toolchain needed):** unzip, quit Double Commander, then
-            run `./install.sh`. Verify the download with the included `.sha256`.
+            | Plugin | Version | Archive |
+            |---|---|---|
+            | markdown-wlx | ${{ env.MDV }} | `markdown-wlx-${{ env.MDV }}-linux.zip` |
+            | media-info-wdx | ${{ env.MIV }} | `media-info-wdx-${{ env.MIV }}-linux.zip` |
+            | image-wlx | ${{ env.IVV }} | `image-wlx-${{ env.IVV }}-linux.zip` |
+            | book-wlx | ${{ env.BVV }} | `book-wlx-${{ env.BVV }}-linux.zip` |
 
-            On other architectures build from source with `./build.sh`.
+            Plugin versions are independent; the release tag is just the train.
+            Verify the downloads with `sha256sum -c SHA256SUMS`.
+
+            Built for **x86_64**; on other architectures build from source with
+            `./build.sh`.
           files: |
-            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ env.VERSION }}.zip
-            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ env.VERSION }}.zip.sha256
+            out/markdown-wlx-${{ env.MDV }}-linux.zip
+            out/media-info-wdx-${{ env.MIV }}-linux.zip
+            out/image-wlx-${{ env.IVV }}-linux.zip
+            out/book-wlx-${{ env.BVV }}-linux.zip
+            out/SHA256SUMS

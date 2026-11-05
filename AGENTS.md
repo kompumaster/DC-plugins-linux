@@ -38,10 +38,12 @@ Per change, in order:
    accumulated diff by a fresh agent (never the author).
 6. **Leak hygiene** — `scripts/leak-guard.sh` must be clean. The repo is public:
    no secrets, no private absolute paths, no business/domain terms.
-7. **Ship** — push over HTTPS, issues/PRs/releases via `gh`. Bump the plugin's
-   `VERSION` constant (single source of truth, must match the tag), update
-   `CHANGELOG.md`, then tag `<plugin>-vX.Y.Z`; the release workflow builds
-   the plugin and publishes an install bundle. Tags are per plugin.
+7. **Ship** — push over HTTPS, issues/PRs/releases via `gh`. Bump each changed
+   plugin's `VERSION` constant (single source of truth), update `CHANGELOG.md`,
+   then tag `linux-vX.Y.Z`; the release workflow builds all four plugins and
+   publishes one release with four archives plus `SHA256SUMS`. Plugin versions
+   are independent — the archive names carry them, the tag is the release
+   train.
 
 ### Cadence
 

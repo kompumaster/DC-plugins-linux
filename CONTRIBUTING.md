@@ -89,6 +89,13 @@ deliberately and note the divergence in the plugin's README.
 - Fix root causes. If a workaround is unavoidable, label it clearly and file the
   proper fix.
 
+## Releases
+
+Releases are cut from a `linux-vX.Y.Z` tag; `.github/workflows/release-linux.yml`
+builds all four plugins and publishes one GitHub release with an archive per
+plugin and `SHA256SUMS`. Bump the `VERSION` constants of the plugins that
+changed and update `CHANGELOG.md` before tagging.
+
 ## Pull requests
 
 Checklist: build succeeds, all exports present, the plugin's `./test/run.sh` is

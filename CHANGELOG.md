@@ -2,9 +2,12 @@
 
 All notable changes to this collection are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); plugins are versioned
-independently and tagged `<plugin>-vX.Y.Z`.
+independently. Releases are tagged `linux-vX.Y.Z` and ship one archive per
+plugin.
 
 ## [Unreleased]
+
+## [linux-v0.1.0] — 2026-11-06
 
 ### Added
 - **markdown-wlx 0.1.0:** Linux/Double Commander port of the Markdown

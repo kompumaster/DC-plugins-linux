@@ -66,7 +66,7 @@ proof.
 ## 5. Wire it into the repo standard
 
 - Add a row to the root `README.md` plugins table.
-- Add a `CHANGELOG.md` entry (tag `<plugin>-vX.Y.Z`).
-- Add the plugin to `.github/workflows/ci.yml` and the release workflow.
+- Add a `CHANGELOG.md` entry (released in the next `linux-vX.Y.Z` train).
+- Add the plugin to `.github/workflows/ci.yml` and to the release workflow (which builds all plugins for one bundle release).
 - Add an ELF/ABI block to `.githooks/pre-commit`.
 - Confirm `bash scripts/leak-guard.sh` is clean.

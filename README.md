@@ -32,9 +32,6 @@ source of truth for the macOS code and shared assets.
 Arch packages: `qt6-base qt6-webengine qt6-svg qt6-imageformats ffmpeg poppler-glib`.
 Debian/Ubuntu: `qt6-base-dev qt6-webengine-dev qt6-svg-dev qt6-image-formats-plugins libavformat-dev libavcodec-dev libavutil-dev libpoppler-glib-dev ffmpeg`.
 
-Releases are built for **x86_64**. On other architectures (e.g. arm64) build
-from source with the same `./build.sh`; nothing in the code is x86-specific.
-
 ## Build / install
 
 Quit Double Commander before running an installer (it rewrites its config on
@@ -49,6 +46,25 @@ cd markdown-wlx      # or media-info-wdx / image-wlx / book-wlx
 The installers are idempotent, back up `doublecmd.xml`, and register the plugin
 before any catch-all lister. See each plugin's README for its settings, keys and
 known limitations.
+
+## Releases
+
+Each release is cut from a `linux-vX.Y.Z` tag and publishes **one GitHub
+release with four archives** plus `SHA256SUMS`:
+
+```
+markdown-wlx-<version>-linux.zip
+media-info-wdx-<version>-linux.zip
+image-wlx-<version>-linux.zip
+book-wlx-<version>-linux.zip
+SHA256SUMS
+```
+
+Unzip the one you need, quit Double Commander, run `./install.sh`, and verify the
+download with `sha256sum -c SHA256SUMS`. The version in each archive name comes
+from that plugin's own `VERSION` constant, so a release train can carry a newer
+plugin next to unchanged ones. Archives are built for x86_64; on other
+architectures build from source with `./build.sh`.
 
 ## Tests
 
