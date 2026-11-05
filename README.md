@@ -1,8 +1,8 @@
 # Double Commander plugins for Linux
 
 Native Linux plugins for [Double Commander](https://doublecmd.sourceforge.io/),
-ported from the macOS plugins by **Nikolai Sachok**
-([`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins), MIT).
+a Linux port built on the macOS plugins in
+[`NikolaiSachok/DC-plugins`](https://github.com/NikolaiSachok/DC-plugins) (MIT).
 One directory per plugin, self-contained, built as an ELF shared object that DC
 loads through the Total Commander plugin ABI, with headless harnesses that drive
 the real built artifact.
