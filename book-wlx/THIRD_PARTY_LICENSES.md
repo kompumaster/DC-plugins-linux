@@ -1,4 +1,4 @@
-# Third-party licenses — book-wlx-linux
+# Third-party licenses — book-wlx
 
 This port vendors one JavaScript library and dynamically links system
 libraries; it does not include the macOS plugin's code beyond the shared,

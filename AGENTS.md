@@ -40,7 +40,7 @@ Per change, in order:
    no secrets, no private absolute paths, no business/domain terms.
 7. **Ship** — push over HTTPS, issues/PRs/releases via `gh`. Bump the plugin's
    `VERSION` constant (single source of truth, must match the tag), update
-   `CHANGELOG.md`, then tag `<plugin>-linux-vX.Y.Z`; the release workflow builds
+   `CHANGELOG.md`, then tag `<plugin>-vX.Y.Z`; the release workflow builds
    the plugin and publishes an install bundle. Tags are per plugin.
 
 ### Cadence
@@ -88,13 +88,13 @@ silent expansion. The roadmap is an index, not a container.
   where it is. Esc/Q, N/P, Alt+←/→, F3/F7 and the view-mode digits then work.
   Scroll/zoom keys stay in the plugin and drive the page through JS where needed.
 - **QWebEngine custom schemes** must be registered before `QApplication` exists;
-  a plugin loads too late. `book-wlx-linux` therefore serves the book from a
+  a plugin loads too late. `book-wlx` therefore serves the book from a
   loopback-only HTTP server bound to `127.0.0.1` with a per-load token and a
   strict CSP, and stops it when the viewer closes. Never widen that to a
   non-loopback interface.
 - **QAbstractScrollArea update:** `QWidget::update()` on a `QGraphicsView` does
   not repaint its viewport. Call `viewport()->update()` (this is why animated
-  images in `image-wlx-linux` looked frozen at first).
+  images in `image-wlx` looked frozen at first).
 - **FP traps:** Double Commander is a Lazarus/FPC app and enables floating-point
   exception traps. Mask exceptions (`fegetenv` / `fesetenv(FE_DFL_ENV)`) around
   library work (FFmpeg, Qt image/SVG code, transforms) and restore the host

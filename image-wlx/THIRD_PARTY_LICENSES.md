@@ -1,4 +1,4 @@
-# Third-party licenses — image-wlx-linux
+# Third-party licenses — image-wlx
 
 This port does not vendor any code or assets. It dynamically links system
 libraries provided by the distribution; they are not part of this repository or

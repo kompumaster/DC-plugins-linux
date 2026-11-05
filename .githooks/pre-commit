@@ -16,11 +16,11 @@ sh scripts/leak-guard.sh
 
 staged=$(git diff --cached --name-only --diff-filter=ACM)
 
-# --- markdown-wlx-linux ---------------------------------------------------
-if printf '%s\n' "$staged" | grep -qE '^markdown-wlx-linux/(MarkdownView\.cpp|listplug\.h|build\.sh)$'; then
-    echo "[pre-commit] markdown-wlx-linux source staged -> building"
-    ( cd markdown-wlx-linux && ./build.sh >/dev/null )
-    wlx="markdown-wlx-linux/build/MarkdownView.wlx"
+# --- markdown-wlx ---------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^markdown-wlx/(MarkdownView\.cpp|listplug\.h|build\.sh)$'; then
+    echo "[pre-commit] markdown-wlx source staged -> building"
+    ( cd markdown-wlx && ./build.sh >/dev/null )
+    wlx="markdown-wlx/build/MarkdownView.wlx"
     info=$(file "$wlx")
     case "$info" in
         *ELF*shared\ object* | *ELF*pie\ executable*) ;;
@@ -32,14 +32,14 @@ if printf '%s\n' "$staged" | grep -qE '^markdown-wlx-linux/(MarkdownView\.cpp|li
         nm -D --defined-only "$wlx" | grep -q " T $sym$" \
             || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
     done
-    echo "[pre-commit] markdown-wlx-linux OK (ELF, all ABI exports present)"
+    echo "[pre-commit] markdown-wlx OK (ELF, all ABI exports present)"
 fi
 
-# --- media-info-wdx-linux -------------------------------------------------
-if printf '%s\n' "$staged" | grep -qE '^media-info-wdx-linux/(MediaInfo\.cpp|contplug\.h|build\.sh)$'; then
-    echo "[pre-commit] media-info-wdx-linux source staged -> building"
-    ( cd media-info-wdx-linux && ./build.sh >/dev/null )
-    wdx="media-info-wdx-linux/build/MediaInfo.wdx"
+# --- media-info-wdx -------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^media-info-wdx/(MediaInfo\.cpp|contplug\.h|build\.sh)$'; then
+    echo "[pre-commit] media-info-wdx source staged -> building"
+    ( cd media-info-wdx && ./build.sh >/dev/null )
+    wdx="media-info-wdx/build/MediaInfo.wdx"
     info=$(file "$wdx")
     case "$info" in
         *ELF*shared\ object* | *ELF*pie\ executable*) ;;
@@ -51,14 +51,14 @@ if printf '%s\n' "$staged" | grep -qE '^media-info-wdx-linux/(MediaInfo\.cpp|con
         nm -D --defined-only "$wdx" | grep -q " T $sym$" \
             || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
     done
-    echo "[pre-commit] media-info-wdx-linux OK (ELF, all ABI exports present)"
+    echo "[pre-commit] media-info-wdx OK (ELF, all ABI exports present)"
 fi
 
-# --- image-wlx-linux ------------------------------------------------------
-if printf '%s\n' "$staged" | grep -qE '^image-wlx-linux/(ImageView\.cpp|listplug\.h|build\.sh)$'; then
-    echo "[pre-commit] image-wlx-linux source staged -> building"
-    ( cd image-wlx-linux && ./build.sh >/dev/null )
-    wlx="image-wlx-linux/build/ImageView.wlx"
+# --- image-wlx ------------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^image-wlx/(ImageView\.cpp|listplug\.h|build\.sh)$'; then
+    echo "[pre-commit] image-wlx source staged -> building"
+    ( cd image-wlx && ./build.sh >/dev/null )
+    wlx="image-wlx/build/ImageView.wlx"
     info=$(file "$wlx")
     case "$info" in
         *ELF*shared\ object* | *ELF*pie\ executable*) ;;
@@ -69,14 +69,14 @@ if printf '%s\n' "$staged" | grep -qE '^image-wlx-linux/(ImageView\.cpp|listplug
         nm -D --defined-only "$wlx" | grep -q " T $sym$" \
             || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
     done
-    echo "[pre-commit] image-wlx-linux OK (ELF, all ABI exports present)"
+    echo "[pre-commit] image-wlx OK (ELF, all ABI exports present)"
 fi
 
-# --- book-wlx-linux -------------------------------------------------------
-if printf '%s\n' "$staged" | grep -qE '^book-wlx-linux/(BookView\.cpp|zipreader\.[ch]|build\.sh)$'; then
-    echo "[pre-commit] book-wlx-linux source staged -> building"
-    ( cd book-wlx-linux && ./build.sh >/dev/null )
-    wlx="book-wlx-linux/build/BookView.wlx"
+# --- book-wlx -------------------------------------------------------
+if printf '%s\n' "$staged" | grep -qE '^book-wlx/(BookView\.cpp|zipreader\.[ch]|build\.sh)$'; then
+    echo "[pre-commit] book-wlx source staged -> building"
+    ( cd book-wlx && ./build.sh >/dev/null )
+    wlx="book-wlx/build/BookView.wlx"
     info=$(file "$wlx")
     case "$info" in
         *ELF*shared\ object* | *ELF*pie\ executable*) ;;
@@ -88,7 +88,7 @@ if printf '%s\n' "$staged" | grep -qE '^book-wlx-linux/(BookView\.cpp|zipreader\
         nm -D --defined-only "$wlx" | grep -q " T $sym$" \
             || { echo "[pre-commit] FAIL: missing export $sym"; exit 1; }
     done
-    echo "[pre-commit] book-wlx-linux OK (ELF, all ABI exports present)"
+    echo "[pre-commit] book-wlx OK (ELF, all ABI exports present)"
 fi
 
 echo "[pre-commit] passed"

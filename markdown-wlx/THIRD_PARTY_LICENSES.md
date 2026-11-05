@@ -1,4 +1,4 @@
-# Third-party licenses — markdown-wlx-linux
+# Third-party licenses — markdown-wlx
 
 The Linux port reuses the vendored libraries from `../_mac_repo/markdown-wlx/assets/`
 (the files are copied here so this plugin directory stays self-contained).

@@ -9,10 +9,10 @@ the real built artifact.
 
 | Plugin | Type | What it does |
 |--------|------|--------------|
-| [`markdown-wlx-linux`](markdown-wlx-linux/) | WLX (lister) | Renders Markdown in the viewer (F3) — GitHub-style CSS, syntax highlighting, tables, Mermaid, KaTeX, configurable light/dark. |
-| [`media-info-wdx-linux`](media-info-wdx-linux/) | WDX (content) | Image/video resolution, audio/video duration, bitrate, codecs, PDF page count and an adaptive `Summary` for custom columns and tooltips. |
-| [`image-wlx-linux`](image-wlx-linux/) | WLX (lister) | Image viewer with wheel/keyboard/toolbar zoom, drag panning, vector-sharp SVG, animations, and copy. |
-| [`book-wlx-linux`](book-wlx-linux/) | WLX (lister) | EPUB 2/3 and FictionBook (FB2/FBZ) reader with a contents sidebar, themes, readable typography and whole-book search. |
+| [`markdown-wlx`](markdown-wlx/) | WLX (lister) | Renders Markdown in the viewer (F3) — GitHub-style CSS, syntax highlighting, tables, Mermaid, KaTeX, configurable light/dark. |
+| [`media-info-wdx`](media-info-wdx/) | WDX (content) | Image/video resolution, audio/video duration, bitrate, codecs, PDF page count and an adaptive `Summary` for custom columns and tooltips. |
+| [`image-wlx`](image-wlx/) | WLX (lister) | Image viewer with wheel/keyboard/toolbar zoom, drag panning, vector-sharp SVG, animations, and copy. |
+| [`book-wlx`](book-wlx/) | WLX (lister) | EPUB 2/3 and FictionBook (FB2/FBZ) reader with a contents sidebar, themes, readable typography and whole-book search. |
 
 The original macOS sources are kept in [`_mac_repo/`](_mac_repo/) as a read-only
 reference and attribution snapshot — see [Repository layout](#repository-layout).
@@ -39,7 +39,7 @@ Quit Double Commander before running an installer (it rewrites its config on
 exit). Each plugin is independent:
 
 ```sh
-cd markdown-wlx-linux      # or media-info-wdx-linux / image-wlx-linux / book-wlx-linux
+cd markdown-wlx      # or media-info-wdx / image-wlx / book-wlx
 ./build.sh                 # build/<Name>.wlx|.wdx (+ assets/ where needed)
 ./install.sh               # copies to ~/.config/doublecmd/plugins/... and registers
 ```
@@ -54,10 +54,10 @@ Every plugin carries a headless (or xvfb-capable) harness that loads the real
 built plugin the way DC does:
 
 ```sh
-cd markdown-wlx-linux && ./test/run.sh   # renders, keys/Esc, search, copy, links
-cd media-info-wdx-linux && ./test/run.sh # formats, PDF/WAV/video, threads, FP traps
-cd image-wlx-linux && ./test/run.sh      # formats, zoom, animation, SVG, clipboard
-cd book-wlx-linux && ./test/run.sh       # EPUB/FB2 DOM, sanitising, search, copy, ZIP
+cd markdown-wlx && ./test/run.sh   # renders, keys/Esc, search, copy, links
+cd media-info-wdx && ./test/run.sh # formats, PDF/WAV/video, threads, FP traps
+cd image-wlx && ./test/run.sh      # formats, zoom, animation, SVG, clipboard
+cd book-wlx && ./test/run.sh       # EPUB/FB2 DOM, sanitising, search, copy, ZIP
 ```
 
 GUI-bound behaviour is also confirmed in a real Double Commander before a
@@ -67,10 +67,10 @@ release; the harnesses are a regression net, not proof.
 
 ```
 _mac_repo/            snapshot of the upstream macOS repository (read-only)
-markdown-wlx-linux/
-media-info-wdx-linux/
-image-wlx-linux/
-book-wlx-linux/
+markdown-wlx/
+media-info-wdx/
+image-wlx/
+book-wlx/
 scripts/leak-guard.sh
 .githooks/pre-commit
 .github/workflows/    Linux CI and release workflows

@@ -14,7 +14,7 @@ Find the exact entry points by inspecting a working plugin or the installed
 Double Commander:
 
 ```sh
-nm -D --defined-only ./markdown-wlx-linux/build/MarkdownView.wlx
+nm -D --defined-only ./markdown-wlx/build/MarkdownView.wlx
 ```
 
 DC prefers the wide entry points (`ListLoadW`, `ContentGetValueW`, …); wide
@@ -23,7 +23,7 @@ strings are UTF-16, ANSI ones UTF-8.
 ## 2. Scaffold
 
 ```
-<name>-<type>-linux/
+<name>-<type>/
 ├── <Name>.cpp            # C++/Qt (plain C for portable readers)
 ├── listplug.h
 ├── build.sh              # ELF shared object, -fvisibility=hidden, ABI dump
@@ -66,7 +66,7 @@ proof.
 ## 5. Wire it into the repo standard
 
 - Add a row to the root `README.md` plugins table.
-- Add a `CHANGELOG.md` entry (tag `<plugin>-linux-vX.Y.Z`).
+- Add a `CHANGELOG.md` entry (tag `<plugin>-vX.Y.Z`).
 - Add the plugin to `.github/workflows/ci.yml` and the release workflow.
 - Add an ELF/ABI block to `.githooks/pre-commit`.
 - Confirm `bash scripts/leak-guard.sh` is clean.

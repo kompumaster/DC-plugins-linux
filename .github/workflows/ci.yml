@@ -14,7 +14,7 @@ jobs:
       - run: bash scripts/leak-guard.sh
 
   markdown:
-    name: Build & verify (markdown-wlx-linux)
+    name: Build & verify (markdown-wlx)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -24,10 +24,10 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb
       - name: Build
-        working-directory: markdown-wlx-linux
+        working-directory: markdown-wlx
         run: ./build.sh
       - name: Assert WLX exports
-        working-directory: markdown-wlx-linux
+        working-directory: markdown-wlx
         run: |
           for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
                      ListGetDetectString ListSetDefaultParams ListSendCommand \
@@ -37,14 +37,14 @@ jobs:
           done
           echo "all WLX exports present ✓"
       - name: Run harness (real artifact)
-        working-directory: markdown-wlx-linux
+        working-directory: markdown-wlx
         env:
           QTWEBENGINE_DISABLE_SANDBOX: "1"
           QTWEBENGINE_CHROMIUM_FLAGS: "--disable-gpu"
         run: ./test/run.sh
 
   media-info:
-    name: Build & verify (media-info-wdx-linux)
+    name: Build & verify (media-info-wdx)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -56,10 +56,10 @@ jobs:
             libavformat-dev libavcodec-dev libavutil-dev \
             libpoppler-glib-dev ffmpeg
       - name: Build
-        working-directory: media-info-wdx-linux
+        working-directory: media-info-wdx
         run: ./build.sh
       - name: Assert WDX exports
-        working-directory: media-info-wdx-linux
+        working-directory: media-info-wdx
         run: |
           for sym in ContentGetSupportedField ContentGetValue ContentGetValueW \
                      ContentGetSupportedFieldFlags ContentGetDetectString \
@@ -69,11 +69,11 @@ jobs:
           done
           echo "all WDX exports present ✓"
       - name: Run harness (real artifact)
-        working-directory: media-info-wdx-linux
+        working-directory: media-info-wdx
         run: ./test/run.sh
 
   image:
-    name: Build & verify (image-wlx-linux)
+    name: Build & verify (image-wlx)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -84,10 +84,10 @@ jobs:
             qt6-base-dev qt6-svg-dev qt6-image-formats-plugins \
             imagemagick xvfb
       - name: Build
-        working-directory: image-wlx-linux
+        working-directory: image-wlx
         run: ./build.sh
       - name: Assert WLX exports
-        working-directory: image-wlx-linux
+        working-directory: image-wlx
         run: |
           for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
                      ListGetDetectString ListSetDefaultParams ListSendCommand; do
@@ -96,11 +96,11 @@ jobs:
           done
           echo "all WLX exports present ✓"
       - name: Run harness (real artifact)
-        working-directory: image-wlx-linux
+        working-directory: image-wlx
         run: ./test/run.sh
 
   book:
-    name: Build & verify (book-wlx-linux)
+    name: Build & verify (book-wlx)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -110,10 +110,10 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb
       - name: Build
-        working-directory: book-wlx-linux
+        working-directory: book-wlx
         run: ./build.sh
       - name: Assert WLX exports
-        working-directory: book-wlx-linux
+        working-directory: book-wlx
         run: |
           for sym in ListLoad ListLoadW ListLoadNext ListLoadNextW ListCloseWindow \
                      ListGetDetectString ListSetDefaultParams ListSendCommand \
@@ -123,7 +123,7 @@ jobs:
           done
           echo "all WLX exports present ✓"
       - name: Run harnesses (real artifact + ZIP reader)
-        working-directory: book-wlx-linux
+        working-directory: book-wlx
         env:
           QTWEBENGINE_DISABLE_SANDBOX: "1"
           QTWEBENGINE_CHROMIUM_FLAGS: "--disable-gpu"

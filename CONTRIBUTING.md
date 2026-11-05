@@ -25,7 +25,7 @@ git config core.hooksPath .githooks
 Each plugin is self-contained in its own directory:
 
 ```sh
-cd markdown-wlx-linux      # or media-info-wdx-linux / image-wlx-linux / book-wlx-linux
+cd markdown-wlx      # or media-info-wdx / image-wlx / book-wlx
 ./build.sh                 # build/<Name>.wlx|.wdx
 
 ./test/run.sh              # builds the plugin and runs the real-artifact harness
@@ -54,7 +54,7 @@ diff.
 ## Plugin layout convention
 
 ```
-<name>-<type>-linux/      # e.g. markdown-wlx-linux
+<name>-<type>/      # e.g. markdown-wlx
 ├── <Name>.cpp            # implementation (C++/Qt; plain C for shared readers)
 ├── listplug.h            # the relevant slice of the DC plugin ABI
 ├── build.sh              # produces build/<Name>.<ext>

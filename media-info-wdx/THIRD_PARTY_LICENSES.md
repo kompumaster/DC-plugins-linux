@@ -1,4 +1,4 @@
-# Third-party licenses — media-info-wdx-linux
+# Third-party licenses — media-info-wdx
 
 Unlike the macOS plugin, this port does not vendor any code. It dynamically
 links system libraries provided by the distribution; they are not part of this

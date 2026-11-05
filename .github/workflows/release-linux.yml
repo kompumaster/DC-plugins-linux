@@ -1,10 +1,13 @@
 name: Release (Linux)
 
-# Tag a release: git tag markdown-wlx-linux-v0.1.0 && git push origin markdown-wlx-linux-v0.1.0
+# Tag a release: git tag markdown-wlx-v0.1.0 && git push origin markdown-wlx-v0.1.0
 on:
   push:
     tags:
-      - '*-linux-v*'
+      - 'markdown-wlx-v*'
+      - 'media-info-wdx-v*'
+      - 'image-wlx-v*'
+      - 'book-wlx-v*'
 
 permissions:
   contents: write
@@ -17,30 +20,31 @@ jobs:
 
       - name: Select plugin
         run: |
+          echo "VERSION=${GITHUB_REF_NAME##*-v}" >> "$GITHUB_ENV"
           case "$GITHUB_REF_NAME" in
-            markdown-wlx-linux-v*)
-              echo "DIR=markdown-wlx-linux" >> "$GITHUB_ENV"
+            markdown-wlx-v*)
+              echo "DIR=markdown-wlx" >> "$GITHUB_ENV"
               echo "BIN=MarkdownView.wlx" >> "$GITHUB_ENV"
               echo "BUNDLE=MarkdownView" >> "$GITHUB_ENV"
               echo "ASSETS=1" >> "$GITHUB_ENV"
               echo "DEPS=qt6-base-dev qt6-webengine-dev libqt6webenginewidgets6 xvfb" >> "$GITHUB_ENV"
               ;;
-            media-info-wdx-linux-v*)
-              echo "DIR=media-info-wdx-linux" >> "$GITHUB_ENV"
+            media-info-wdx-v*)
+              echo "DIR=media-info-wdx" >> "$GITHUB_ENV"
               echo "BIN=MediaInfo.wdx" >> "$GITHUB_ENV"
               echo "BUNDLE=MediaInfo" >> "$GITHUB_ENV"
               echo "ASSETS=0" >> "$GITHUB_ENV"
               echo "DEPS=qt6-base-dev qt6-image-formats-plugins libavformat-dev libavcodec-dev libavutil-dev libpoppler-glib-dev ffmpeg" >> "$GITHUB_ENV"
               ;;
-            image-wlx-linux-v*)
-              echo "DIR=image-wlx-linux" >> "$GITHUB_ENV"
+            image-wlx-v*)
+              echo "DIR=image-wlx" >> "$GITHUB_ENV"
               echo "BIN=ImageView.wlx" >> "$GITHUB_ENV"
               echo "BUNDLE=ImageView" >> "$GITHUB_ENV"
               echo "ASSETS=0" >> "$GITHUB_ENV"
               echo "DEPS=qt6-base-dev qt6-svg-dev qt6-image-formats-plugins imagemagick xvfb" >> "$GITHUB_ENV"
               ;;
-            book-wlx-linux-v*)
-              echo "DIR=book-wlx-linux" >> "$GITHUB_ENV"
+            book-wlx-v*)
+              echo "DIR=book-wlx" >> "$GITHUB_ENV"
               echo "BIN=BookView.wlx" >> "$GITHUB_ENV"
               echo "BUNDLE=BookView" >> "$GITHUB_ENV"
               echo "ASSETS=1" >> "$GITHUB_ENV"
@@ -54,7 +58,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends $DEPS
+          sudo apt-get install -y --no-install-recommends $DEPS zip
 
       - name: Build plugin
         run: |
@@ -68,7 +72,7 @@ jobs:
           cp "build/$BIN" "$BUNDLE/"
           if [ "$ASSETS" = "1" ]; then cp -R assets "$BUNDLE/assets"; fi
           cp install.sh register_plugin.py README.md THIRD_PARTY_LICENSES.md "$BUNDLE/"
-          ZIP="$BUNDLE-linux-${GITHUB_REF_NAME}.zip"
+          ZIP="$BUNDLE-linux-${VERSION}.zip"
           zip -rqy "$ZIP" "$BUNDLE"
           sha256sum "$ZIP" > "$ZIP.sha256"
           ls -la ./*.zip*
@@ -86,5 +90,5 @@ jobs:
 
             On other architectures build from source with `./build.sh`.
           files: |
-            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ github.ref_name }}.zip
-            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ github.ref_name }}.zip.sha256
+            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ env.VERSION }}.zip
+            ${{ env.DIR }}/${{ env.BUNDLE }}-linux-${{ env.VERSION }}.zip.sha256
