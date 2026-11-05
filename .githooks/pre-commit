@@ -14,7 +14,7 @@ cd "$ROOT"
 echo "[pre-commit] leak-guard"
 sh scripts/leak-guard.sh
 
-staged=$(git diff --cached --name-only --diff-filter=ACM)
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
 
 # --- markdown-wlx ---------------------------------------------------
 if printf '%s\n' "$staged" | grep -qE '^markdown-wlx/(MarkdownView\.cpp|listplug\.h|build\.sh)$'; then
